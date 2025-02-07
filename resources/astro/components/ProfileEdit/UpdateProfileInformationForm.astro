@@ -1,0 +1,118 @@
+---
+import { CSRF } from "mightyModule";
+import InputLabel from "../InputLabel.astro";
+import TextInput from "../TextInput.astro";
+import InputError from "../InputError.astro";
+import PrimaryButton from "../PrimaryButton.astro";
+import { errors } from "mighty/public/utils";
+
+interface Props {
+    class?: string;
+    mustVerifyEmail?: boolean;
+    user: {
+        name: string;
+        email: string;
+        email_verified_at: string | null;
+    };
+    status?: string;
+}
+
+const { class: className, mustVerifyEmail, user, status } = Astro.props;
+
+const formErrors = errors<{ name?: string; email?: string }>("profileUpdate");
+---
+
+<section class={className}>
+    <header>
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Profile Information
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Update your account's profile information and email address.
+        </p>
+    </header>
+
+    <form id="profile-edit-form" action="TODO" class="mt-6 space-y-6">
+        <CSRF />
+
+        <div>
+            <InputLabel for="name" value="Name" />
+
+            <TextInput
+                id="name"
+                name="name"
+                class="mt-1 block w-full"
+                required
+                autofocus
+                autocomplete="name"
+            />
+
+            <InputError class="mt-2" message={formErrors.name} />
+        </div>
+
+        <div>
+            <InputLabel for="email" value="Email" />
+
+            <TextInput
+                id="email"
+                name="email"
+                type="email"
+                class="mt-1 block w-full"
+                required
+                autocomplete="username"
+            />
+
+            <InputError class="mt-2" message={formErrors.email} />
+        </div>
+
+        {
+            mustVerifyEmail && user.email_verified_at === null && (
+                <div>
+                    <p class="mt-2 text-sm text-gray-800 dark:text-gray-200">
+                        Your email address is unverified.
+                        <a
+                            href="TODO"
+                            class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
+                        >
+                            Click here to re-send the verification email.
+                        </a>
+                    </p>
+
+                    {status === "verification-link-sent" && (
+                        <div class="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
+                            A new verification link has been sent to your email
+                            address.
+                        </div>
+                    )}
+                </div>
+            )
+        }
+
+        <div class="flex items-center gap-4">
+            <PrimaryButton id="profile-edit-submit-button">Save</PrimaryButton>
+
+            <!-- <Transition
+                show={recentlySuccessful}
+                enter="transition ease-in-out"
+                enterFrom="opacity-0"
+                leave="transition ease-in-out"
+                leaveTo="opacity-0"
+            >
+                <p class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+            </Transition> -->
+        </div>
+    </form>
+
+    <script>
+        document
+            .getElementById("profile-edit-form")
+            ?.addEventListener("submit", (event) => {
+                (
+                    document.getElementById(
+                        "profile-edit-submit-button"
+                    ) as HTMLButtonElement
+                ).disabled = true;
+            });
+    </script>
+</section>

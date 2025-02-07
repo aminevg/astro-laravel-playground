@@ -1,0 +1,5 @@
+---
+import { csrfToken } from "./utils";
+---
+
+<input type="hidden" name="_token" value={csrfToken()} autocomplete="off" />

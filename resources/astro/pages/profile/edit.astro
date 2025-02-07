@@ -1,0 +1,62 @@
+---
+import DeleteUserForm from "@astro/components/ProfileEdit/DeleteUserForm.astro";
+import UpdatePasswordForm from "@astro/components/ProfileEdit/UpdatePasswordForm.astro";
+import UpdateProfileInformationForm from "@astro/components/ProfileEdit/UpdateProfileInformationForm.astro";
+import AuthenticatedLayout from "@astro/layouts/AuthenticatedLayout.astro";
+
+interface Props {
+    user: {
+        name: string;
+        email: string;
+        email_verified_at: string | null;
+    };
+    mustVerifyEmail?: boolean;
+    status?: string;
+}
+
+const {
+    user = {
+        name: "John Doe",
+        email: "john@example.com",
+        email_verified_at: null,
+    },
+    mustVerifyEmail,
+    status,
+} = Astro.props;
+---
+
+<AuthenticatedLayout user={user} title="Profile">
+    <h2
+        class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+        slot="header"
+    >
+        Profile
+    </h2>
+
+    <div class="py-12">
+        <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+            <div
+                class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+            >
+                <UpdateProfileInformationForm
+                    mustVerifyEmail={mustVerifyEmail}
+                    status={status}
+                    user={user}
+                    class="max-w-xl"
+                />
+            </div>
+
+            <div
+                class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+            >
+                <UpdatePasswordForm class="max-w-xl" />
+            </div>
+
+            <div
+                class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+            >
+                <DeleteUserForm class="max-w-xl" />
+            </div>
+        </div>
+    </div>
+</AuthenticatedLayout>

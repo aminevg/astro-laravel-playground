@@ -1,0 +1,22 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@astro/*": [
+        "./resources/astro/*"
+      ],
+      "mightyModule": [
+        "./mighty/public"
+      ]
+    },
+    "checkJs": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "include": [
+    ".astro/types.d.ts",
+    "resources/astro/**/*",
+    "mighty/**/*"
+  ]
+}

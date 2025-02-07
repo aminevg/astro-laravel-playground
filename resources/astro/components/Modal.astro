@@ -1,0 +1,16 @@
+---
+interface Props extends astroHTML.JSX.DialogHTMLAttributes {}
+
+const { class: className, ...props } = Astro.props;
+---
+
+<dialog
+    {...props}
+    class:list={[
+        "transform overflow-hidden rounded-lg bg-white shadow-xl transition-all [transition-behavior:allow-discrete] sm:mx-auto sm:w-full dark:bg-gray-800 sm:max-w-2xl backdrop:bg-gray-500/75 backdrop:dark:bg-gray-900/75",
+        "animate-modal-close sm:animate-modal-close-sm open:animate-modal-open open:sm:animate-modal-open-sm backdrop:animate-backdrop-close open:backdrop:animate-backdrop-open",
+        className,
+    ]}
+>
+    <slot />
+</dialog>

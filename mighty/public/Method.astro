@@ -1,0 +1,20 @@
+---
+type Props = { put: true } | { patch: true } | { delete: true };
+
+const props = Astro.props;
+
+let method: "PUT" | "PATCH" | "DELETE";
+if ("put" in props) {
+    method = "PUT";
+} else if ("patch" in props) {
+    method = "PATCH";
+} else if ("delete" in props) {
+    method = "DELETE";
+} else {
+    throw new Error(
+        "Method specified in Method component should be one of put, patch, or delete"
+    );
+}
+---
+
+<input type="hidden" name="_method" value={method} />

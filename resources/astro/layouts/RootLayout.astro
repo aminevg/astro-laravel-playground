@@ -1,0 +1,49 @@
+---
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+    title?: string;
+    lang?: string;
+}
+
+const { title, lang } = Astro.props;
+---
+
+<html lang={lang}>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>{title}</title>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net" />
+        <link
+            href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap"
+            rel="stylesheet"
+        />
+        <ClientRouter />
+        <script>
+            import { showingNavigationDropdown } from "@astro/components/Navigation/hamburgerStore";
+            document.addEventListener("astro:page-load", async () => {
+                showingNavigationDropdown.set(false);
+            });
+        </script>
+        <style is:inline>
+            /* Route announcer */
+            .astro-route-announcer {
+                position: absolute;
+                left: 0;
+                top: 0;
+                clip: rect(0 0 0 0);
+                clip-path: inset(50%);
+                overflow: hidden;
+                white-space: nowrap;
+                width: 1px;
+                height: 1px;
+            }
+        </style>
+    </head>
+    <body class="font-sans antialiased has-[dialog[open]]:overflow-hidden"
+        ><slot /></body>
+</html>

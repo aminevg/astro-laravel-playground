@@ -1,0 +1,123 @@
+---
+import InputLabel from "@astro/components/InputLabel.astro";
+import DangerButton from "@astro/components/DangerButton.astro";
+import SecondaryButton from "@astro/components/SecondaryButton.astro";
+import TextInput from "@astro/components/TextInput.astro";
+import InputError from "@astro/components/InputError.astro";
+import { CSRF } from "mightyModule";
+import Modal from "@astro/components/Modal.astro";
+import { errors } from "mighty/public/utils";
+import Method from "mighty/public/Method.astro";
+
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const formErrors = errors<{ password?: string }>("userDeletion");
+---
+
+<section class:list={["space-y-6", className]}>
+    <header>
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Delete Account
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Once your account is deleted, all of its resources and data will be
+            permanently deleted. Before deleting your account, please download
+            any data or information that you wish to retain.
+        </p>
+    </header>
+
+    <DangerButton id="delete-user-open-modal-button">
+        Delete Account
+    </DangerButton>
+</section>
+
+<Modal
+    id="delete-user-modal"
+    data-open={formErrors.password ? "open" : undefined}
+>
+    <form id="delete-user-form" action="/profile" method="POST" class="p-6">
+        <CSRF />
+        <Method delete />
+
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Are you sure you want to delete your account?
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Once your account is deleted, all of its resources and data will be
+            permanently deleted. Please enter your password to confirm you would
+            like to permanently delete your account.
+        </p>
+
+        <div class="mt-6">
+            <InputLabel for="password" value="Password" class="sr-only" />
+
+            <TextInput
+                type="password"
+                name="password"
+                class="mt-1 block w-3/4"
+                required
+                autofocus
+                placeholder="Password"
+            />
+
+            <InputError
+                id="delete-user-password-error"
+                message={formErrors.password}
+                class="mt-2"
+            />
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <SecondaryButton id="delete-user-close-modal-button" type="button">
+                Cancel
+            </SecondaryButton>
+
+            <DangerButton type="submit" class="ms-3">
+                Delete Account
+            </DangerButton>
+        </div>
+    </form>
+</Modal>
+
+<script>
+    import { modal } from "@astro/utils/modal";
+
+    document.addEventListener("astro:page-load", (a) => {
+        // Make sure view transition goes smoothly
+        let scrollTop: number;
+        document.addEventListener("astro:before-swap", (event) => {
+            scrollTop = document.documentElement.scrollTop;
+        });
+        document.addEventListener("astro:after-swap", () => {
+            document.documentElement.scrollTop = scrollTop;
+        });
+
+        const { open } = modal({
+            trigger: "#delete-user-open-modal-button",
+            modal: "#delete-user-modal",
+            close: "#delete-user-close-modal-button",
+            onClose: () => {
+                (
+                    document.getElementById(
+                        "delete-user-form"
+                    ) as HTMLFormElement
+                ).reset();
+                (
+                    document.getElementById(
+                        "delete-user-password-error"
+                    ) as HTMLParagraphElement
+                ).innerHTML = "";
+            },
+        });
+
+        if (document.getElementById("delete-user-modal")?.dataset.open) {
+            open();
+        }
+    });
+</script>
