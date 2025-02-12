@@ -4,6 +4,7 @@ import { experimental_AstroContainer } from "astro/container";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import reactRenderer from "@astrojs/react/server.js";
 import { setGlobals } from "./public/globals";
+import { fileURLToPath } from "node:url";
 
 export async function render(
   componentToRender: string,
@@ -65,3 +66,5 @@ export async function isPageScriptInjected() {
     })
     .catch(() => true);
 }
+
+export async function getAllStyles(componentToRender: string) {}

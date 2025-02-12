@@ -30,7 +30,7 @@ const { title, lang } = Astro.props;
                 showingNavigationDropdown.set(false);
             });
         </script>
-        <style is:inline>
+        <!-- <style is:inline>
             /* Route announcer */
             .astro-route-announcer {
                 position: absolute;
@@ -43,8 +43,14 @@ const { title, lang } = Astro.props;
                 width: 1px;
                 height: 1px;
             }
-        </style>
+        </style> -->
     </head>
     <body class="font-sans antialiased has-[dialog[open]]:overflow-hidden"
         ><slot /></body>
 </html>
+
+<style>
+    :root {
+        font-size: xx-small;
+    }
+</style>

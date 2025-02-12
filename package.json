@@ -4,7 +4,7 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "mighty": "node mighty/dev.js",
+        "mighty": "node --experimental-strip-types mighty/dev.js",
         "prod": "node mighty/prod.js"
     },
     "devDependencies": {

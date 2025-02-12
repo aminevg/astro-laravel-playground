@@ -7,6 +7,7 @@ import {
   getTailwindTags,
   injectTagsIntoHead,
 } from "./utils.js";
+import { getStylesForURL } from "./styles.ts";
 
 /**
  * @typedef {import('hast').ElementContent} ElementContent
@@ -97,12 +98,64 @@ export function createAstroInlineConfig() {
                 req.body.errors,
                 req.body.session
               );
+              console.log(
+                url,
+                "file://" +
+                  "/Users/amine/mighty-playground/chirper" +
+                  "/resources/astro/" +
+                  url
+              );
+              console.log(
+                (
+                  await getStylesForURL(
+                    new URL(
+                      "file://" +
+                        "/Users/amine/mighty-playground/chirper" +
+                        "/resources/astro/" +
+                        url +
+                        ".astro"
+                    ),
+                    server
+                  )
+                ).styles.map((style) => ({
+                  type: "element",
+                  tagName: "style",
+                  properties: {
+                    type: "text/css",
+                    "data-vite-dev-id": style.id,
+                  },
+                  children: [{ type: "text", value: style.content }],
+                }))
+              );
 
               const tailwindTags = isTailwindConfigured
                 ? await getTailwindTags(server)
                 : [];
 
-              const styleTags = await getStyleTags(server, url);
+              // const styleTags = await getStyleTags(server, url);
+              /**
+               * @type {ElementContent[]}
+               */
+              const styleTags = (
+                await getStylesForURL(
+                  new URL(
+                    "file://" +
+                      "/Users/amine/mighty-playground/chirper" +
+                      "/resources/astro/" +
+                      url +
+                      ".astro"
+                  ),
+                  server
+                )
+              ).styles.map((style) => ({
+                type: "element",
+                tagName: "style",
+                properties: {
+                  type: "text/css",
+                  "data-vite-dev-id": style.id,
+                },
+                children: [{ type: "text", value: style.content }],
+              }));
 
               const realResult = injectTagsIntoHead(result, [
                 viteClientScriptTag,
